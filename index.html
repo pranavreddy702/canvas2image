@@ -13,11 +13,11 @@
     }
 </style>
 <body>
-<div class="doc">
+ <div class="doc">
     <canvas width="600" height="400" id="cvs"></canvas>
     <div>
         <p>
-            <button id="save">save</button> or <button id="convert">convert to</button> as: 
+            <button id="save">save</button> or <button id="convert">convert to</button> as:
             <select id="sel">
                 <option value="png">png</option>
                 <option value="jpeg">jpeg</option>
@@ -29,7 +29,7 @@
 
     </div>
     <div id="imgs">
-        
+
     </div>
 </div>
 <script>
@@ -47,7 +47,14 @@
         $imgW = document.getElementById('imgW');
         $imgH = document.getElementById('imgH');
         bind();
-        draw();
+        var background = new Image();
+        background.crossOrigin = '';
+        background.src = "http://i.imgur.com/yf6d9SX.jpg";
+
+        background.onload = function(){
+           ctx.drawImage(background,0,0,600,400);
+        }
+// http://impactjs.com/forums/help/canvas-tainted-by-cross-origin-data/page/1
     }
     function bind () {
         canvas.onmousedown = function(e) {
@@ -67,11 +74,14 @@
                 ctx.moveTo(iLastX, iLastY);
                 ctx.lineTo(iX, iY);
                 ctx.stroke();
+                ctx.strokeStyle = "blue";
+                ctx.lineJoin = "round";
+                ctx.lineWidth = 5;
                 iLastX = iX;
                 iLastY = iY;
+               // http://www.williammalone.com/articles/create-html5-canvas-javascript-drawing-app/#demo-colors
             }
         };
-        
         $save.onclick = function (e) {
             var type = $sel.value,
                 w = $imgW.value,
@@ -84,16 +94,8 @@
                 h = $imgH.value;
             $imgs.appendChild(Canvas2Image.convertToImage(canvas, w, h, type))
         }
-        
     }
-    function draw () {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(0, 0, 600, 400);
-        ctx.fillStyle = 'red';
-        ctx.fillRect(100, 100, 50, 50);
-    }
-    
-    
+
     onload = init;
 </script>
 </body>
